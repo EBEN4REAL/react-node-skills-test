@@ -34,6 +34,11 @@ export const ListStudents: React.FC = () => {
     setFilter(payload);
   };
 
+  const studentsWithStatus = (data?.students || []).map((student) => ({
+    ...student,
+    status: student.systemAccess ? 'Active' : 'Not active'
+  }));
+
   return (
     <>
       <Box sx={{ display: 'flex', mb: 1 }}>
@@ -59,7 +64,7 @@ export const ListStudents: React.FC = () => {
           isLoading,
           isError,
           error: getErrorMsg(error as FetchBaseQueryError | SerializedError).message,
-          users: data?.students || []
+          users: studentsWithStatus
         }}
       />
     </>

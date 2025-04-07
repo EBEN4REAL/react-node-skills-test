@@ -1,15 +1,15 @@
 const express = require("express");
 const cookieParser = require("cookie-parser"); 
 const dotenv = require("dotenv");
+const { v1Routes } = require("./routes/v1");
+const { corsPolicy } = require("./config/cors");
+const path = require("path");
+const { handle404Error, handleGlobalError, } = require("./middlewares");
 dotenv.config();
 
-const { handle404Error, handleGlobalError, } = require("./middlewares");
-const { v1Routes } = require("./routes/v1");
-const { cors } = require("./config");
-const path = require("path");
 const app = express();
 
-app.use(cors)
+app.use(corsPolicy)
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(cookieParser());

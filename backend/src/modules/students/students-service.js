@@ -14,9 +14,9 @@ const getAllStudents = async (payload) => {
     if (students.length <= 0) {
         throw new ApiError(404, "Students not found");
     }
-
     return students;
-}
+};
+
 
 const getStudentDetail = async (id) => {
     await checkStudentId(id);
@@ -30,24 +30,31 @@ const getStudentDetail = async (id) => {
 }
 
 const addNewStudent = async (payload) => {
-    const ADD_STUDENT_AND_EMAIL_SEND_SUCCESS = "Student added and verification email sent successfully.";
-    const ADD_STUDENT_AND_BUT_EMAIL_SEND_FAIL = "Student added, but failed to send verification email.";
-    try {
-        const result = await addOrUpdateStudent(payload);
-        if (!result.status) {
-            throw new ApiError(500, result.message);
-        }
+  const STUDENT_ADDED_EMAIL_SUCCESS = "Student added and verification email sent successfully.";
+  const STUDENT_ADDED_EMAIL_FAIL = "Student added, but failed to send verification email.";
+  const UNABLE_TO_ADD_STUDENT = "Unable to add student";
+  try {
+    const result = await addOrUpdateStudent(payload);
 
-        try {
-            await sendAccountVerificationEmail({ userId: result.userId, userEmail: payload.email });
-            return { message: ADD_STUDENT_AND_EMAIL_SEND_SUCCESS };
-        } catch (error) {
-            return { message: ADD_STUDENT_AND_BUT_EMAIL_SEND_FAIL }
-        }
-    } catch (error) {
-        throw new ApiError(500, "Unable to add student");
+    if (!result.status) {
+      throw new ApiError(500, result.message);
     }
-}
+
+    try {
+      await sendAccountVerificationEmail({
+        userId: result.userId,
+        userEmail: payload.email
+      });
+      return { message: STUDENT_ADDED_EMAIL_SUCCESS };
+    } catch (emailError) {
+      return { message: STUDENT_ADDED_EMAIL_FAIL };
+    }
+
+  } catch (error) {
+    console.error("addNewStudent => Unable to add student:", error);
+    throw new ApiError(500, UNABLE_TO_ADD_STUDENT);
+  }
+};
 
 const updateStudent = async (payload) => {
     const result = await addOrUpdateStudent(payload);
@@ -55,7 +62,7 @@ const updateStudent = async (payload) => {
         throw new ApiError(500, result.message);
     }
 
-    return { message: result.message };
+    return { message: "Student record update successfully" };
 }
 
 const setStudentStatus = async ({ userId, reviewerId, status }) => {

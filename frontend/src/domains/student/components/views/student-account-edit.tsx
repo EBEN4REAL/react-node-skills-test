@@ -77,7 +77,6 @@ export const StudentAccountEdit: React.FC<StudentAccountEditProps> = ({
       <Paper sx={{ p: 3 }}>
         <FormProvider {...methods}>
           <BasicInformation />
-
           <hr />
           <AcademicInformation />
 

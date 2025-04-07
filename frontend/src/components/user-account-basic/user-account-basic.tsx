@@ -41,7 +41,9 @@ export const UserAccountBasic = ({ data }: { data: UserAccountBasicDataProps }) 
       { accessorKey: 'id', header: 'ID' },
       { accessorKey: 'name', header: 'Name' },
       { accessorKey: 'email', header: 'Email' },
-      { accessorKey: 'role', header: 'Role' },
+      { accessorKey: 'className', header: 'Class' },
+      { accessorKey: 'roll', header: 'Roll' },
+      { accessorKey: 'status', header: 'Status' },
       {
         accessorKey: 'systemAccess',
         header: 'System Access',
